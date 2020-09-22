@@ -1,31 +1,31 @@
-import moment from "moment";
+import moment from 'moment';
 
-import { WEEKDAYS } from "../constants";
+import { WEEKDAYS } from '../constants';
 
 export default function getCalendarMonthWeeks(
   month,
   enableOutsideDays,
-  firstDayOfWeek = moment.localeData().firstDayOfWeek()
+  firstDayOfWeek = moment.localeData().firstDayOfWeek(),
 ) {
   if (!moment.isMoment(month) || !month.isValid()) {
-    throw new TypeError("`month` must be a valid moment object");
+    throw new TypeError('`month` must be a valid moment object');
   }
   if (WEEKDAYS.indexOf(firstDayOfWeek) === -1) {
-    throw new TypeError("`firstDayOfWeek` must be an integer between 0 and 6");
+    throw new TypeError('`firstDayOfWeek` must be an integer between 0 and 6');
   }
 
   // set utc offset to get correct dates in future (when timezone changes)
-  const firstOfMonth = month.clone().startOf("jMonth").hour(12);
-  const lastOfMonth = month.clone().endOf("jMonth").hour(12);
+  const firstOfMonth = month.clone().startOf('jMonth').hour(12);
+  const lastOfMonth = month.clone().endOf('jMonth').hour(12);
 
   // calculate the exact first and last days to fill the entire matrix
   // (considering days outside month)
   const prevDays = (firstOfMonth.day() + 7 - firstDayOfWeek) % 7;
   const nextDays = (firstDayOfWeek + 6 - lastOfMonth.day()) % 7;
-  const firstDay = firstOfMonth.clone().subtract(prevDays, "day");
-  const lastDay = lastOfMonth.clone().add(nextDays, "day");
+  const firstDay = firstOfMonth.clone().subtract(prevDays, 'day');
+  const lastDay = lastOfMonth.clone().add(nextDays, 'day');
 
-  const totalDays = lastDay.diff(firstDay, "days") + 1;
+  const totalDays = lastDay.diff(firstDay, 'days') + 1;
 
   const currentDay = firstDay.clone();
   const weeksInMonth = [];
@@ -42,7 +42,7 @@ export default function getCalendarMonthWeeks(
 
     weeksInMonth[weeksInMonth.length - 1].push(day);
 
-    currentDay.add(1, "day");
+    currentDay.add(1, 'day');
   }
 
   return weeksInMonth;
